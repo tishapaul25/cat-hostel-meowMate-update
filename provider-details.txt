@@ -1,0 +1,114 @@
+<?php
+if (!isset($_GET['id'])) {
+    echo "Provider ID not provided!";
+    exit;
+}
+
+$providerId = intval($_GET['id']);
+require_once __DIR__ . '/../database.php';
+$conn = getDatabaseConnection();
+
+$sql = "SELECT * FROM hostel_providers WHERE id = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("i", $providerId);
+$stmt->execute();
+$result = $stmt->get_result();
+$provider = $result->fetch_assoc();
+
+if (!$provider) {
+    echo "Provider not found!";
+    exit;
+}
+
+// Ensure optional fields exist
+$provider['facility_photos'] = isset($provider['facility_photos']) ? json_decode($provider['facility_photos'], true) : ['placeholder.jpg'];
+$provider['services'] = isset($provider['services']) ? json_decode($provider['services'], true) : [];
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title><?php echo $provider['full_name']; ?> - PurrfectStay</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+</head>
+<body class="bg-gray-50">
+
+<!-- Header -->
+<header class="bg-white shadow-sm sticky top-0 z-50 p-4 flex justify-between items-center">
+    <a href="index.php" class="text-xl font-bold">PurrfectStay</a>
+    <nav class="space-x-4">
+        <a href="index.php" class="text-gray-600 hover:text-blue-600">Home</a>
+        <a href="providers.php" class="text-blue-600 font-medium">Providers</a>
+    </nav>
+</header>
+
+<!-- Breadcrumb -->
+<div class="max-w-7xl mx-auto px-4 py-4 text-sm text-gray-500">
+    <a href="index.php" class="hover:text-blue-600">Home</a> &gt;
+    <a href="providers.php" class="hover:text-blue-600">Providers</a> &gt;
+    <span><?php echo $provider['full_name']; ?></span>
+</div>
+
+<!-- Main Content -->
+<div class="max-w-7xl mx-auto px-4 pb-20 grid grid-cols-1 lg:grid-cols-2 gap-12">
+
+    <!-- Facility Photos -->
+    <div>
+        <div class="bg-white rounded-2xl shadow-lg overflow-hidden mb-4">
+            <img id="main-image" src="<?php echo $provider['facility_photos'][0]; ?>" alt="<?php echo $provider['full_name']; ?>" class="w-full h-96 object-cover">
+        </div>
+        <div class="grid grid-cols-3 gap-4">
+            <?php foreach ($provider['facility_photos'] as $index => $img): ?>
+                <button class="thumbnail-btn" data-image="<?php echo $img; ?>">
+                    <img src="<?php echo $img; ?>" alt="Photo <?php echo $index+1; ?>" class="w-full h-24 object-cover rounded-lg">
+                </button>
+            <?php endforeach; ?>
+        </div>
+    </div>
+
+    <!-- Provider Info -->
+    <div>
+        <h1 class="text-3xl font-bold mb-4"><?php echo $provider['full_name']; ?></h1>
+        <p class="text-gray-600 mb-2"><strong>Address:</strong> <?php echo $provider['address']; ?></p>
+        <p class="text-gray-600 mb-2"><strong>Experience:</strong> <?php echo $provider['experience_years']; ?> years</p>
+        <p class="text-gray-600 mb-2"><strong>Capacity:</strong> <?php echo $provider['max_capacity']; ?> cats</p>
+        <p class="text-gray-600 mb-4"><strong>Rate:</strong> BDT <?php echo $provider['overnight_rate']; ?> / night</p>
+
+        <h3 class="text-xl font-bold mb-2">Services Provided:</h3>
+        <ul class="list-disc pl-5 mb-6">
+            <?php foreach ($provider['services'] as $service): ?>
+                <li><?php echo $service; ?></li>
+            <?php endforeach; ?>
+        </ul>
+
+        <div class="flex gap-4">
+            <button onclick="contactProvider(<?php echo $provider['id']; ?>)" class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700">Contact</button>
+            <button onclick="bookProvider(<?php echo $provider['id']; ?>)" class="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700">Book Now</button>
+        </div>
+    </div>
+</div>
+
+<script>
+lucide.createIcons();
+
+// Thumbnail switching
+document.querySelectorAll('.thumbnail-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+        document.getElementById('main-image').src = this.dataset.image;
+    });
+});
+
+function contactProvider(id) {
+    alert("Contacting provider ID: " + id);
+}
+
+function bookProvider(id) {
+    alert("Booking provider ID: " + id);
+}
+</script>
+
+</body>
+</html>
