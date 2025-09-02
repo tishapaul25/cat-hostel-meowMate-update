@@ -147,9 +147,9 @@ $page_title = "Hostel Provider Management - Admin";
                 <a href="dashboard.php" class="flex items-center px-3 py-4 text-sm font-medium hover:bg-green-700">
                     <i data-lucide="home" class="w-4 h-4 mr-2"></i>Dashboard
                 </a>
-                <a href="vet-management.php" class="flex items-center px-3 py-4 text-sm font-medium hover:bg-green-700">
+                <!--<a href="vet-management.php" class="flex items-center px-3 py-4 text-sm font-medium hover:bg-green-700">
                     <i data-lucide="stethoscope" class="w-4 h-4 mr-2"></i>Veterinarians
-                </a>
+                </a> !-->
                 <a href="provider-management.php" class="flex items-center px-3 py-4 text-sm font-medium bg-green-700">
                     <i data-lucide="users" class="w-4 h-4 mr-2"></i>Hostel Providers
                 </a>

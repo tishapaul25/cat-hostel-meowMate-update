@@ -113,7 +113,7 @@
     </div>
 
     <!-- Quick Actions -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+   <!-- <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <div class="bg-white p-6 rounded-lg shadow-sm border">
             <div class="text-center">
                 <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -150,7 +150,7 @@
                 <button class="w-full bg-purple-600 text-white py-2 px-4 rounded-lg hover:bg-purple-700 transition-colors">
                     Shop Now
                 </button>
-            </div>
+            </div> -->
         </div>
     </div>
 </div>
